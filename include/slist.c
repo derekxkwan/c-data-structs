@@ -11,7 +11,7 @@ Snode * SLnewNode(int ins){
 
 Slist * SLnew(){
 	Slist * slist = malloc(sizeof(Slist));
-	list->head = NULL;
+	slist->head = NULL;
 	return slist;
 }
 
@@ -106,7 +106,7 @@ void SLaddBeforeIdx(Slist * slist, int ins, int idx){
 void SLdeleteIdx(Slist * list, int idx){
 	Snode * curNode = list->head;
 	if(curNode != NULL && idx >= 0){
-		Node * prevNode = NULL;
+		Snode * prevNode = NULL;
 		int counter = 0;
 		while(counter < idx && curNode->next != NULL){
 			prevNode = curNode;
@@ -125,7 +125,6 @@ void SLdeleteIdx(Slist * list, int idx){
 
 void SLprintIdx(Slist * slist, int idx){
 	Snode * curNode = slist->head;
-	int counter = 0;
 	if(curNode != NULL){
 		int counter = 0;
 		while(curNode->next != NULL && counter < idx){
@@ -133,7 +132,7 @@ void SLprintIdx(Slist * slist, int idx){
 			counter++;
 		};
 		if(counter==idx){
-			printf("%f\n", curNode->data);
+			printf("%d\n", curNode->data);
 		};
 	};
 }
@@ -141,7 +140,7 @@ void SLprintIdx(Slist * slist, int idx){
 void SLdumpList(Slist * slist){
 	Snode * curNode = slist->head;
 	while(curNode != NULL){
-		printf("%f ", curNode->data);
+		printf("%d ", curNode->data);
 		curNode = curNode->next;
 	};
 	printf("\n");
@@ -173,7 +172,7 @@ void SLemptyList(Slist * slist){
 	slist->head = NULL;
 }
 
-void SLdeleteList(Slist * slist)
+void SLdeleteList(Slist * slist){
 	SLemptyList(slist);
 	free(slist);
 }
