@@ -16,13 +16,13 @@ Slist * SLnew(){
 }
 
 void SLaddFirst(Slist * slist, int ins){
-	if(slist->head == NULL){
+	Snode * curHead = slist->head;
+	if(curHead == NULL){
 		slist->head = SLnewNode(ins);
 	}
 	else{
-		Snode * curhead = slist->head;
 		slist->head = SLnewNode(ins);
-		slist->head->next = curhead;
+		slist->head->next = curHead;
 	};
 }
 
@@ -103,8 +103,8 @@ void SLaddBeforeIdx(Slist * slist, int ins, int idx){
 
 }
 
-void SLdeleteIdx(Slist * list, int idx){
-	Snode * curNode = list->head;
+void SLdeleteIdx(Slist * slist, int idx){
+	Snode * curNode = slist->head;
 	if(curNode != NULL && idx >= 0){
 		Snode * prevNode = NULL;
 		int counter = 0;
@@ -117,6 +117,9 @@ void SLdeleteIdx(Slist * list, int idx){
 			//if we actually hit idx, else ignore
 			if(prevNode != NULL){
 				prevNode->next = curNode->next;
+			};
+			if(slist -> head == curNode){
+				slist->head = curNode->next;
 			};
 			free(curNode);
 		};
@@ -148,13 +151,14 @@ void SLdumpList(Slist * slist){
 
 void SLreverse(Slist * slist){
 	Snode * curNode = slist->head;
+	Snode* nextNode;
 	if(curNode != NULL){
 		Snode * prevNode = NULL;
 		while(curNode != NULL){
-			Snode * nextNode = curNode->next;
-			if(nextNode != NULL){
-				curNode->next = prevNode;
-			};
+			nextNode = curNode->next;
+			//reverse
+			curNode->next = prevNode;
+			//increment
 			prevNode = curNode;
 			curNode = nextNode;	
 		};

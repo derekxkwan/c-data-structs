@@ -4,9 +4,9 @@ Heap * HeapNew(int type, int maxsize){
 	Heap * newHeap = malloc(sizeof(Heap));
 	newHeap->type = type > 0 ? 1 : 0;
 	//let's 1-index and skip the first idx of the array so need 1 extra idx
-	//ie a 1 elt heap needs 2 slots
-	newHeap->maxsize = maxsize < 2 ? 2 : (maxsize+1);
-	newHeap->data = malloc(sizeof(float)*newHeap->maxsize);
+	//ie a 1 elt heap needs 2 slots so allocate one more than maxsize
+	newHeap->maxsize = maxsize < 1 ? 1 : maxsize;
+	newHeap->data = malloc(sizeof(float)*(newHeap->maxsize+1));
 	newHeap->size = 0;
 	return newHeap;
 }
@@ -56,7 +56,7 @@ void HeapSwapElt(float * elt1, float * elt2){
 
 void HeapPush(Heap * heap, float elt){
 	//new position
-	if(heap->maxsize > (heap->size)+1 ){
+	if(heap->maxsize >= (heap->size + 1)){
 		int size = heap->size;
 		//do this only if there's room to put new elt
 		int pos = ++size; //inc then eq since we are 1-indexing
@@ -66,7 +66,7 @@ void HeapPush(Heap * heap, float elt){
 		//keep comparing to parent which is floor(pos/2)
 		//(since they're ints, that's done auto
 		//if child fails inv with parent, swap
-		for(;!HeapInv(heap, pos,(pos/2)) && pos >= 1; pos /= 2){
+		for(;!HeapInv(heap, pos,(pos/2)) && (pos/2) >= 1; pos /= 2){
 			HeapSwapElt(&(heap->data[pos]), &(heap->data[(pos/2)]));
 		};
 	}
@@ -77,9 +77,9 @@ void HeapPush(Heap * heap, float elt){
 
 Heap * HeapHeapify(float * arr, int arrsize, int type, int maxsize){
 
-	//bounds checking, need one extra elt since 1-idxed
-	if((arrsize + 1) > maxsize){
-		maxsize = (arrsize+1);
+	//bounds checking 
+	if(arrsize  > maxsize){
+		maxsize = arrsize;
 	};
 	Heap * newHeap = HeapNew(type, maxsize);
 	
@@ -144,8 +144,8 @@ float HeapPop(Heap * heap){
 }
 
 void HeapMerge(Heap * heap1, Heap * heap2){
-	//bounds checking, remember maxsize takes into account the extra index
-	if(heap1->maxsize < (heap1->size + heap2->size + 1)){
+	//bounds checking
+	if(heap1->maxsize < (heap1->size + heap2->size)){
 		printf("error! heap1 too small to merge into!");
 		return;
 	}

@@ -19,6 +19,22 @@ $(SLISTOBJ): $(SLISTDEPS)
 slist: $(SLISTOBJ) $(SLISTSRC)
 	$(CC) -o $(SLISTEXEC) $^ $(CFLAGS)
 
+DLISTEXEC=dlisttest
+_DLISTSRC = dlisttest.c
+DLISTSRC = $(patsubst %,$(IDIR)/%,$(_DLISTSRC))
+_DLISTDEPS = dlist.c dlist.h 
+DLISTDEPS = $(patsubst %,$(IDIR)/%,$(_DLISTDEPS))
+_DLISTOBJ = dlist.o 
+DLISTOBJ = $(patsubst %,$(ODIR)/%,$(_DLISTOBJ))
+
+
+$(DLISTOBJ): $(DLISTDEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+dlist: $(DLISTOBJ) $(DLISTSRC)
+	$(CC) -o $(DLISTEXEC) $^ $(CFLAGS)
+
+
 HEAPEXEC=heaptest
 _HEAPSRC = heaptest.c
 HEAPSRC = $(patsubst %,$(IDIR)/%,$(_HEAPSRC))
@@ -37,4 +53,4 @@ heap: $(HEAPOBJ) $(HEAPSRC)
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o $(SLISTEXEC) $(HEAPEXEC)
+	rm -f $(ODIR)/*.o $(SLISTEXEC) $(DLISTEXEC) $(HEAPEXEC) 
